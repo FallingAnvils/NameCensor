@@ -43,8 +43,6 @@ public class RealNameCommand extends CommandBase {
         if(args.length < 1) return;
         if(!(sender instanceof EntityPlayer)) return;
         
-        System.out.println("THE COMMAND RUN, ARG0 " + args[0]);
-        
         boolean hasResult = false;
         
         HashMap<String, Integer> playerMap = cn.getCensorMap();
