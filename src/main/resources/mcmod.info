@@ -1,0 +1,11 @@
+[{
+  "modid": "censornames",
+  "name": "Censor Usernames",
+  "description": "Censor usernames on Hypixel",
+  "version": "0.1",
+  "mcversion": "1.8.9",
+  "logoFile": "",
+  "url": "https://ethansite.com",
+  "authorList": ["FallingAnvils"],
+  "credits": "2pi.pw, boomboompower"
+}]
