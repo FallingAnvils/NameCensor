@@ -77,21 +77,21 @@ public class CensorNameEvents {
         
         boolean changedAthing = false;
         
-        for(String tryhard : cn.getCensorMap().keySet()) {
-            if(tryhard.isEmpty()) System.err.println("THE TRYHARD WAS EMPTY!!!!!!!");
-            if(goodFormat.contains(tryhard) /*&& !tryhard.isEmpty()*/) {
+        for(String playerName : cn.getCensorMap().keySet()) {
+            if(playerName.isEmpty()) System.err.println("THE TRYHARD WAS EMPTY!!!!!!!");
+            if(goodFormat.contains(playerName)) {
                 
                 
                 // if their name has discrete color (ex. joining game messsages)
                 goodFormat = goodFormat.replaceAll(
-                    "(?:(?!.))*(§[6,7,a,b]){1}" + tryhard, 
-                    "§7Player#" + cn.getCensorMap().get(tryhard)
+                    "(?:(?!.))*(§[6,7,a,b]){1}" + playerName, 
+                    "§7Player#" + cn.getCensorMap().get(playerName)
                 );
                 
                 // if their name carries over the color from before (ex. chat)
                 goodFormat = goodFormat.replaceAll(
-                    tryhard,
-                    "Player#" + cn.getCensorMap().get(tryhard)
+                    playerName,
+                    "Player#" + cn.getCensorMap().get(playerName)
                 );
                 
                 // Make their chat white if they have no rank
@@ -118,24 +118,23 @@ public class CensorNameEvents {
     }
     
     private void updatePlayerList() {
-        Collection<NetworkPlayerInfo> tryhards_and_also_me = Minecraft.getMinecraft().getNetHandler().getPlayerInfoMap();
-        Iterator<NetworkPlayerInfo> stupidJavaConstruct = tryhards_and_also_me.iterator();
-        while(stupidJavaConstruct.hasNext()) {
+        Collection<NetworkPlayerInfo> tabList = Minecraft.getMinecraft().getNetHandler().getPlayerInfoMap();
+        Iterator<NetworkPlayerInfo> tabListIter = tabList.iterator();
+        while(tabListIter.hasNext()) {
         
-            NetworkPlayerInfo a_single_tryhard_or_also_me = stupidJavaConstruct.next();
-
-            GameProfile tryhards_profile = a_single_tryhard_or_also_me.getGameProfile();
-            String tryhards_name = tryhards_profile.getName();
+            NetworkPlayerInfo player = tabListIter.next();
+            GameProfile profile = player.getGameProfile();
+            String name = profile.getName();
             
-            if(!cn.getCensorMap().containsKey(tryhards_name)) {
-                if(tryhards_name != null && !tryhards_name.isEmpty() && tryhards_name.hashCode() != 0) { // stuff we dont want
-                    cn.getCensorMap().put(tryhards_name, tryhards_name.hashCode());
+            if(!cn.getCensorMap().containsKey(name)) {
+                if(name != null && !name.name() && name.hashCode() != 0) { // stuff we dont want
+                    cn.getCensorMap().put(name, name.hashCode());
                 } else {
-                    System.out.println("EMPTY NAME, DISPLAY: " + a_single_tryhard_or_also_me.getDisplayName());
+                    System.out.println("EMPTY NAME, DISPLAY: " + player.getDisplayName());
                 }
             }
             
-            a_single_tryhard_or_also_me.setDisplayName(new ChatComponentText("§7Player#" + cn.getCensorMap().get(tryhards_name)));
+            player.setDisplayName(new ChatComponentText("§7Player#" + cn.getCensorMap().get(name)));
             
         }
     }
