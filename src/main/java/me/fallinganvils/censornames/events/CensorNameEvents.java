@@ -140,20 +140,4 @@ public class CensorNameEvents {
         }
     }
     
-
-    private int dontMakeItLeakMemoryTick = 30 * 20;
-    
-    @SubscribeEvent(priority = EventPriority.LOW)
-    public void onGameTick(TickEvent.ClientTickEvent event) {
-        /*if(Minecraft.getMinecraft().getCurrentServerData() != null) {
-            if(dontMakeItLeakMemoryTick == 0) {
-                cn.getCensorMap().clear();
-                updatePlayerList();
-                dontMakeItLeakMemoryTick = 30 * 20;
-            } else {
-                dontMakeItLeakMemoryTick--;
-            }
-        }*/
-    }
-
 }
