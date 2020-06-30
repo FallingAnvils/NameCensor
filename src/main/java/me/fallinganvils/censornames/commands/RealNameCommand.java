@@ -45,13 +45,17 @@ public class RealNameCommand extends CommandBase {
         
         System.out.println("THE COMMAND RUN, ARG0 " + args[0]);
         
+        boolean hasResult = false;
+        
         HashMap<String, Integer> playerMap = cn.getCensorMap();
         for(String key : playerMap.keySet()) {
             String hashStr = cn.getCensorMap().get(key).toString();
             if(hashStr.startsWith(args[0])) {
+                hasResult = true;
                 ((EntityPlayer)sender).addChatMessage(new ChatComponentText("§2Real name of Player#" + hashStr + ": " + key));
             }
         }
+        if(!hasResult) ((EntityPlayer)sender).addChatMessage(new ChatComponentText("§cNo matches found for " + args[0]));
     }
 
 
