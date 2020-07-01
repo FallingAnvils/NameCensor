@@ -16,18 +16,21 @@ import net.minecraftforge.client.event.RenderGameOverlayEvent;
 import com.mojang.authlib.GameProfile;
 import net.minecraftforge.event.entity.player.PlayerEvent;
 import net.minecraftforge.event.world.WorldEvent;
+import me.fallinganvils.censornames.util.CensorMap;
 
+import com.google.common.hash.Hashing;
+import java.nio.charset.Charset;
 
 import java.util.Arrays;
 import java.util.List;
 import java.util.regex.Pattern;
-import java.util.HashMap;
 import java.util.Random;
 
 public class CensorNameEvents {
 
 
     private CensorNames cn = CensorNames.getInstance();
+    private CensorMap censorMap = cn.getCensorMap();
 
     private long player_list_update_time = 0;
     private int player_list_update_interval = 500;
@@ -51,16 +54,16 @@ public class CensorNameEvents {
     @SubscribeEvent
     public void nametagRequested(PlayerEvent.NameFormat event) {
     
-        if(!cn.getCensorMap().containsKey(event.username) && event.username != null && !event.username.isEmpty() && event.username.hashCode() != 0) {
-            cn.getCensorMap().put(event.username, event.username.hashCode());
+        if(!censorMap.containsKey(event.username)) {
+            censorMap.putName(event.username);
         }
  
-        event.displayname = "§7Player#" + cn.getCensorMap().get(event.username);
+        event.displayname = "§7" + censorMap.getCensoredName(event.username);
     }
     
     @SubscribeEvent
     public void worldUnload(WorldEvent.Unload event) {
-        cn.getCensorMap().clear();
+        censorMap.clear();
     }
     
 
@@ -77,7 +80,7 @@ public class CensorNameEvents {
         
         boolean changedAthing = false;
         
-        for(String playerName : cn.getCensorMap().keySet()) {
+        for(String playerName : censorMap.keySet()) {
             if(playerName.isEmpty()) System.err.println("THE TRYHARD WAS EMPTY!!!!!!!");
             if(goodFormat.contains(playerName)) {
                 
@@ -85,13 +88,13 @@ public class CensorNameEvents {
                 // if their name has discrete color (ex. joining game messsages)
                 goodFormat = goodFormat.replaceAll(
                     "(?:(?!.))*(§[6,7,a,b]){1}" + playerName, 
-                    "§7Player#" + cn.getCensorMap().get(playerName)
+                    "§7" + censorMap.getCensoredName(playerName)
                 );
                 
                 // if their name carries over the color from before (ex. chat)
                 goodFormat = goodFormat.replaceAll(
                     playerName,
-                    "Player#" + cn.getCensorMap().get(playerName)
+                    censorMap.getCensoredName(playerName)
                 );
                 
                 // Make their chat white if they have no rank
@@ -126,15 +129,11 @@ public class CensorNameEvents {
             GameProfile profile = player.getGameProfile();
             String name = profile.getName();
             
-            if(!cn.getCensorMap().containsKey(name)) {
-                if(name != null && !name.isEmpty() && name.hashCode() != 0) { // stuff we dont want
-                    cn.getCensorMap().put(name, name.hashCode());
-                } else {
-                    System.out.println("EMPTY NAME, DISPLAY: " + player.getDisplayName());
-                }
+            if(!censorMap.containsKey(name)) {
+                censorMap.putName(name);
             }
             
-            player.setDisplayName(new ChatComponentText("§7Player#" + cn.getCensorMap().get(name)));
+            player.setDisplayName(new ChatComponentText("§7" + censorMap.getCensoredName(name)));
             
         }
     }
