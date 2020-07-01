@@ -127,7 +127,7 @@ public class CensorNameEvents {
             String name = profile.getName();
             
             if(!cn.getCensorMap().containsKey(name)) {
-                if(name != null && !name.name() && name.hashCode() != 0) { // stuff we dont want
+                if(name != null && !name.isEmpty() && name.hashCode() != 0) { // stuff we dont want
                     cn.getCensorMap().put(name, name.hashCode());
                 } else {
                     System.out.println("EMPTY NAME, DISPLAY: " + player.getDisplayName());
