@@ -17,6 +17,7 @@ import com.mojang.authlib.GameProfile;
 import net.minecraftforge.event.entity.player.PlayerEvent;
 import net.minecraftforge.event.world.WorldEvent;
 import me.fallinganvils.censornames.util.CensorMap;
+import me.fallinganvils.censornames.util.ColorCode;
 
 import com.google.common.hash.Hashing;
 import java.nio.charset.Charset;
@@ -58,7 +59,7 @@ public class CensorNameEvents {
             censorMap.putName(event.username);
         }
  
-        event.displayname = "§7" + censorMap.getCensoredName(event.username);
+        event.displayname = ColorCode.LIGHTGRAY + censorMap.getCensoredName(event.username);
     }
     
     @SubscribeEvent
@@ -87,8 +88,8 @@ public class CensorNameEvents {
                 
                 // if their name has discrete color (ex. joining game messsages)
                 goodFormat = goodFormat.replaceAll(
-                    "(?:(?!.))*(§[6,7,a,b]){1}" + playerName, 
-                    "§7" + censorMap.getCensoredName(playerName)
+                    "(?:(?!.))*(\u00A7[6,7,a,b]){1}" + playerName, 
+                    ColorCode.LIGHTGRAY + censorMap.getCensoredName(playerName)
                 );
                 
                 // if their name carries over the color from before (ex. chat)
@@ -99,8 +100,8 @@ public class CensorNameEvents {
                 
                 // Make their chat white if they have no rank
                 goodFormat = goodFormat.replaceAll(
-                    "(?:(?!.))*§7:",
-                    "§r:"
+                    "(?:(?!.))*"+ColorCode.LIGHTGRAY+":",
+                    ColorCode.RESET + ":"
                 );
                 changedAthing = true;
             }
@@ -111,7 +112,7 @@ public class CensorNameEvents {
             System.out.println("I changed something!");
             
             // Remove their rank
-            goodFormat = goodFormat.replaceAll("(?:(?!.))*§.\\[(MVP|VIP)(§.)*\\+{0,2}(§.)*\\] ", "§7");
+            goodFormat = goodFormat.replaceAll("(?:(?!.))*\u00A7.\\[(MVP|VIP)(\u00A7.)*\\+{0,2}(\u00A7.)*\\] ", ColorCode.LIGHTGRAY);
             
             System.out.println("THE LESS GOOD MESSAGE: " + lessGoodFormat);
             System.out.println("THE ACTUALLY GOOD MESSAGE: " + goodFormat);
@@ -133,7 +134,7 @@ public class CensorNameEvents {
                 censorMap.putName(name);
             }
             
-            player.setDisplayName(new ChatComponentText("§7" + censorMap.getCensoredName(name)));
+            player.setDisplayName(new ChatComponentText(ColorCode.LIGHTGRAY + censorMap.getCensoredName(name)));
             
         }
     }

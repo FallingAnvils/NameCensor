@@ -14,6 +14,7 @@ import java.util.List;
 import net.minecraft.command.CommandBase;
 import net.minecraft.server.MinecraftServer;
 import com.google.common.hash.HashCode;
+import me.fallinganvils.censornames.util.ColorCode;
 
 import java.util.Arrays;
 import java.util.List;
@@ -52,10 +53,10 @@ public class RealNameCommand extends CommandBase {
             String hashStr = censorMap.getShort(key);
             if(hashStr.startsWith(args[0])) {
                 hasResult = true;
-                ((EntityPlayer)sender).addChatMessage(new ChatComponentText("§2Real name of " + playerMap.getCensoredName(key) + "...: " + key));
+                ((EntityPlayer)sender).addChatMessage(new ChatComponentText(ColorCode.GREEN+"Real name of " + playerMap.getCensoredName(key) + "...: " + key));
             }
         }
-        if(!hasResult) ((EntityPlayer)sender).addChatMessage(new ChatComponentText("§cNo matches found for " + args[0]));
+        if(!hasResult) ((EntityPlayer)sender).addChatMessage(new ChatComponentText(ColorCode.LIGHTRED+"No matches found for " + args[0]));
     }
 
 
