@@ -2,23 +2,19 @@ package me.fallinganvils.censornames.commands;
 
 import me.fallinganvils.censornames.CensorNames;
 import me.fallinganvils.censornames.util.CensorMap;
-import net.minecraft.util.ChatComponentText;
-
+import me.fallinganvils.censornames.util.ColorCode;
+import net.minecraft.command.CommandBase;
 import net.minecraft.command.CommandException;
 import net.minecraft.command.ICommand;
 import net.minecraft.command.ICommandSender;
-import net.minecraft.util.BlockPos;
-import net.minecraft.util.EnumChatFormatting;
 import net.minecraft.entity.player.EntityPlayer;
-import java.util.List;
-import net.minecraft.command.CommandBase;
-import net.minecraft.server.MinecraftServer;
-import com.google.common.hash.HashCode;
-import me.fallinganvils.censornames.util.ColorCode;
+import net.minecraft.util.BlockPos;
+import net.minecraft.util.ChatComponentText;
+import net.minecraft.util.EnumChatFormatting;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import java.util.ArrayList;
 
 public class RealNameCommand extends CommandBase {
 

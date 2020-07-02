@@ -1,31 +1,21 @@
 package me.fallinganvils.censornames.events;
 
-import me.fallinganvils.censornames.CensorNames;
-
-import net.minecraft.client.Minecraft;
-import net.minecraftforge.client.event.ClientChatReceivedEvent;
-import net.minecraftforge.fml.common.eventhandler.EventPriority;
-import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
-import net.minecraftforge.fml.common.gameevent.TickEvent;
-import net.minecraft.util.ChatComponentText;
-import net.minecraft.client.network.NetworkPlayerInfo;
-import net.minecraft.util.IChatComponent;
-import java.util.Collection;
-import java.util.Iterator;
-import net.minecraftforge.client.event.RenderGameOverlayEvent;
 import com.mojang.authlib.GameProfile;
-import net.minecraftforge.event.entity.player.PlayerEvent;
-import net.minecraftforge.event.world.WorldEvent;
+import me.fallinganvils.censornames.CensorNames;
 import me.fallinganvils.censornames.util.CensorMap;
 import me.fallinganvils.censornames.util.ColorCode;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.network.NetworkPlayerInfo;
+import net.minecraft.util.ChatComponentText;
+import net.minecraftforge.client.event.ClientChatReceivedEvent;
+import net.minecraftforge.client.event.RenderGameOverlayEvent;
+import net.minecraftforge.event.entity.player.PlayerEvent;
+import net.minecraftforge.event.world.WorldEvent;
+import net.minecraftforge.fml.common.eventhandler.EventPriority;
+import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 
-import com.google.common.hash.Hashing;
-import java.nio.charset.Charset;
-
-import java.util.Arrays;
-import java.util.List;
-import java.util.regex.Pattern;
-import java.util.Random;
+import java.util.Collection;
+import java.util.Iterator;
 
 public class CensorNameEvents {
 
