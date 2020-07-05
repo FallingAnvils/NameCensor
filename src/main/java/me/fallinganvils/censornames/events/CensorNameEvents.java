@@ -1,30 +1,22 @@
 package me.fallinganvils.censornames.events;
 
-import me.fallinganvils.censornames.CensorNames;
-
-import net.minecraft.client.Minecraft;
-import net.minecraftforge.client.event.ClientChatReceivedEvent;
-import net.minecraftforge.fml.common.eventhandler.EventPriority;
-import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
-import net.minecraftforge.fml.common.gameevent.TickEvent;
-import net.minecraft.util.ChatComponentText;
-import net.minecraft.client.network.NetworkPlayerInfo;
-import net.minecraft.util.IChatComponent;
-import java.util.Collection;
-import java.util.Iterator;
-import net.minecraftforge.client.event.RenderGameOverlayEvent;
 import com.mojang.authlib.GameProfile;
+import me.fallinganvils.censornames.CensorNames;
+import me.fallinganvils.censornames.util.CensorFormat;
+import me.fallinganvils.censornames.util.CensorMap;
+import me.fallinganvils.censornames.util.ColorCode;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.network.NetworkPlayerInfo;
+import net.minecraft.util.ChatComponentText;
+import net.minecraftforge.client.event.ClientChatReceivedEvent;
+import net.minecraftforge.client.event.RenderGameOverlayEvent;
 import net.minecraftforge.event.entity.player.PlayerEvent;
 import net.minecraftforge.event.world.WorldEvent;
-import me.fallinganvils.censornames.util.CensorMap;
+import net.minecraftforge.fml.common.eventhandler.EventPriority;
+import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 
-import com.google.common.hash.Hashing;
-import java.nio.charset.Charset;
-
-import java.util.Arrays;
-import java.util.List;
-import java.util.regex.Pattern;
-import java.util.Random;
+import java.util.Collection;
+import java.util.Iterator;
 
 public class CensorNameEvents {
 
@@ -40,9 +32,7 @@ public class CensorNameEvents {
     @SubscribeEvent
     public void giveMePlayerListPls(RenderGameOverlayEvent.Pre event) {
         if(event.type == RenderGameOverlayEvent.ElementType.PLAYER_LIST) {
-        
             if(System.currentTimeMillis() - player_list_update_time >= player_list_update_interval) {
-            
                 updatePlayerList();
                 player_list_update_time = System.currentTimeMillis();
                 
@@ -58,7 +48,7 @@ public class CensorNameEvents {
             censorMap.putName(event.username);
         }
  
-        event.displayname = "§7" + censorMap.getCensoredName(event.username);
+        event.displayname = ColorCode.LIGHTGRAY + censorMap.getCensoredName(event.username);
     }
     
     @SubscribeEvent
@@ -86,10 +76,10 @@ public class CensorNameEvents {
                 
                 
                 // if their name has discrete color (ex. joining game messsages)
-                goodFormat = goodFormat.replaceAll(
-                    "(?:(?!.))*(§[6,7,a,b]){1}" + playerName, 
-                    "§7" + censorMap.getCensoredName(playerName)
-                );
+                /*goodFormat = goodFormat.replaceAll(
+                    "(?:(?!.))*(\u00A7[6,7,a,b]){1}" + playerName, 
+                    ColorCode.LIGHTGRAY + censorMap.getCensoredName(playerName)
+                );*/
                 
                 // if their name carries over the color from before (ex. chat)
                 goodFormat = goodFormat.replaceAll(
@@ -99,9 +89,17 @@ public class CensorNameEvents {
                 
                 // Make their chat white if they have no rank
                 goodFormat = goodFormat.replaceAll(
-                    "(?:(?!.))*§7:",
-                    "§r:"
+                    "(?:(?!.))*"+ColorCode.LIGHTGRAY+":",
+                    ColorCode.RESET + ":"
                 );
+
+                goodFormat = goodFormat.replaceAll(
+                        "\u00A7r\u00A7e" + censorMap.getCensoredName(playerName) + "\u00A7r\u00A77",
+                        ColorCode.YELLOW + censorMap.getCensoredName(playerName) + ColorCode.RESET
+                );
+
+                goodFormat = CensorFormat.removeRanks(goodFormat, censorMap.getCensoredName(playerName));
+
                 changedAthing = true;
             }
         }
@@ -111,8 +109,8 @@ public class CensorNameEvents {
             System.out.println("I changed something!");
             
             // Remove their rank
-            goodFormat = goodFormat.replaceAll("(?:(?!.))*§.\\[(MVP|VIP)(§.)*\\+{0,2}(§.)*\\] ", "§7");
-            
+            //goodFormat = goodFormat.replaceAll("(?:(?!.))*\u00A7.\\[(MVP|VIP)(\u00A7.)*\\+{0,2}(\u00A7.)*\\] ", ColorCode.LIGHTGRAY);
+
             System.out.println("THE LESS GOOD MESSAGE: " + lessGoodFormat);
             System.out.println("THE ACTUALLY GOOD MESSAGE: " + goodFormat);
             event.message = new ChatComponentText(goodFormat);
@@ -132,9 +130,31 @@ public class CensorNameEvents {
             if(!censorMap.containsKey(name)) {
                 censorMap.putName(name);
             }
-            
-            player.setDisplayName(new ChatComponentText("§7" + censorMap.getCensoredName(name)));
-            
+
+
+            /*if(player.getDisplayName() != null) {
+                //String newName = player.getDisplayName().getFormattedText();
+                //System.out.println("OLD DISPLAY NAME NEW NOW " + newName);
+                //player.setDisplayName(new ChatComponentText(newName));
+            } else {*/
+                String newName = name;
+                newName = newName.replaceAll(name, censorMap.getCensoredName(name));
+
+
+
+
+                if(player.getPlayerTeam() != null) {
+                    System.out.println(player.getPlayerTeam().formatString("FORMATTED STRING"));
+                    newName = player.getPlayerTeam().formatString(newName);
+                } //Minecraft.getMinecraft().ingameGUI.getTabList().getPlayerName(player);
+
+                newName = CensorFormat.removeRanks(newName, censorMap.getCensoredName(name));
+
+                System.out.println("NEW DISPLAY NAME " + newName);
+                player.setDisplayName(new ChatComponentText(ColorCode.LIGHTGRAY + newName));
+            //}
+            //System.out.println("THEIR TEAM IS: " + player.getPlayerTeam().formatString("I AM INPUT"));
+
         }
     }
     
