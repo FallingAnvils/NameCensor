@@ -93,6 +93,11 @@ public class CensorNameEvents {
                     ColorCode.RESET + ":"
                 );
 
+                goodFormat = goodFormat.replaceAll(
+                        "\u00A7r\u00A7e" + censorMap.getCensoredName(playerName) + "\u00A7r\u00A77",
+                        ColorCode.YELLOW + censorMap.getCensoredName(playerName) + ColorCode.RESET
+                );
+
                 goodFormat = CensorFormat.removeRanks(goodFormat, censorMap.getCensoredName(playerName));
 
                 changedAthing = true;
